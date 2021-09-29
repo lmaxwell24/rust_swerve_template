@@ -1,0 +1,5 @@
+[target.arm-unknown-linux-gnueabi]
+linker = "/usr/bin/arm-frc2021-linux-gnueabi-gcc"
+
+[build]
+target = "arm-unknown-linux-gnueabi"

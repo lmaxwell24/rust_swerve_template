@@ -1,0 +1,17 @@
+[package]
+name = "wpilib_test"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+# wpilib = {path="../first-rust-competition"}
+wpilib = "0.4"
+ctre="0.6"
+
+[package.metadata.frc]
+team-number = 1757
+rio-address = "10.17.57.2"
+target-dir = "target"
+executable-name = "wpilib_test"
