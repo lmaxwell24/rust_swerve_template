@@ -1,8 +1,8 @@
+use std::time;
 use wpilib::{
     ds::{DriverStation, RobotState},
     RobotBase,
 };
-use std::time;
 
 /// Implements a specific type of robot program framework, for
 /// `start_iterative` and `start_timed`.
@@ -34,7 +34,7 @@ pub trait IterativeRobot {
 
     fn disabled_periodic(&mut self) {}
     fn autonomous_periodic(&mut self) {}
-    fn teleop_periodic(&mut self) {}
+    fn teleop_periodic(&mut self, ds: &DriverStation) {}
     fn test_periodic(&mut self) {}
 }
 
@@ -42,6 +42,7 @@ fn loop_func<T: IterativeRobot>(
     robot: &mut T,
     last_mode: Option<RobotState>,
     cur_mode: RobotState,
+    ds: &DriverStation,
 ) {
     // Check for state transitions
     if last_mode != Some(cur_mode) {
@@ -55,18 +56,10 @@ fn loop_func<T: IterativeRobot>(
 
     // Call the appropriate periodic function
     match cur_mode {
-        RobotState::Autonomous => {
-            robot.autonomous_periodic()
-        }
-        RobotState::Teleop => {
-            robot.teleop_periodic()
-        }
-        RobotState::Test => {
-            robot.test_periodic()
-        }
-        _ => {
-            robot.disabled_periodic()
-        }
+        RobotState::Autonomous => robot.autonomous_periodic(),
+        RobotState::Teleop => robot.teleop_periodic(ds),
+        RobotState::Test => robot.test_periodic(),
+        _ => robot.disabled_periodic(),
     }
 
     robot.robot_periodic()
@@ -93,7 +86,7 @@ pub fn start_iterative<T: IterativeRobot>() -> ! {
         ds.wait_for_data();
 
         let cur_mode = ds.robot_state();
-        loop_func(&mut robot, last_mode, cur_mode);
+        loop_func(&mut robot, last_mode, cur_mode, &ds);
         last_mode = Some(cur_mode);
     }
 }
@@ -122,7 +115,7 @@ pub fn start_timed_with_period<T: IterativeRobot>(period: time::Duration) {
 
     loop {
         let cur_mode = ds.robot_state();
-        loop_func(&mut robot, last_mode, cur_mode);
+        loop_func(&mut robot, last_mode, cur_mode, &ds);
         last_mode = Some(cur_mode);
         ::std::thread::sleep(period);
     }

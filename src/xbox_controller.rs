@@ -1,10 +1,18 @@
 use wpilib::ds::{JoystickAxis, JoystickPort};
 
-pub const PORT_1: JoystickPort = JoystickPort::new(0).unwrap();
+pub fn PORT_1() -> JoystickPort {
+    JoystickPort::new(0).unwrap()
+}
 
-pub const LEFT_X: JoystickAxis = JoystickAxis::new(0).unwrap();
-pub const LEFT_Y: JoystickAxis = JoystickAxis::new(1).unwrap();
-pub const RIGHT_TRIGGER: JoystickAxis = JoystickAxis::new(3).unwrap();
-// pub const LEFT_TRIGGER = 2;
-// pub const RIGHT_X = 4;
-// pub const RIGHT_Y = 5;
+pub fn LEFT_X() -> JoystickAxis {
+    JoystickAxis::new(0).unwrap()
+}
+pub fn LEFT_Y() -> JoystickAxis {
+    JoystickAxis::new(1).unwrap()
+}
+pub fn RIGHT_TRIGGER() -> JoystickAxis {
+    JoystickAxis::new(3).unwrap()
+}
+// pub fn LEFT_TRIGGER = 2;
+// pub fn RIGHT_X = 4;
+// pub fn RIGHT_Y = 5;

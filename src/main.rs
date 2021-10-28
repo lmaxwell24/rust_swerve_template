@@ -1,33 +1,30 @@
 use wpilib;
+mod constants;
 mod robot;
 mod xbox_controller;
 use ctre::motor_control::{BaseMotorController, ControlMode, DemandType, TalonSRX};
 
-struct Robot<'a> {
+struct Robot {
     left_motor: TalonSRX,
     right_motor: TalonSRX,
-    ds: wpilib::ds::DriverStation<'a>,
 }
 
-impl robot::IterativeRobot for Robot<'_> {
-    fn new<'a>(ds: &'a wpilib::ds::DriverStation) -> Robot<'a> {
+impl robot::IterativeRobot for Robot {
+    fn new(ds: &wpilib::ds::DriverStation) -> Robot {
         Robot {
             left_motor: TalonSRX::new(1),
             right_motor: TalonSRX::new(2),
-            ds: ds.clone(),
         }
     }
     fn teleop_init(&mut self) {
         println!("start teleop");
     }
-    fn teleop_periodic(&mut self) {
-        let fw = self
-            .ds
-            .stick_axis(xbox_controller::PORT_1, xbox_controller::LEFT_Y)
+    fn teleop_periodic(&mut self, ds: &wpilib::ds::DriverStation) {
+        let fw = ds
+            .stick_axis(xbox_controller::PORT_1(), xbox_controller::LEFT_Y())
             .unwrap() as f64;
-        let turn = self
-            .ds
-            .stick_axis(xbox_controller::PORT_1, xbox_controller::LEFT_X)
+        let turn = ds
+            .stick_axis(xbox_controller::PORT_1(), xbox_controller::LEFT_X())
             .unwrap() as f64;
         self.left_motor.set(
             ControlMode::PercentOutput,
