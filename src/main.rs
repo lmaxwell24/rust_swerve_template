@@ -1,12 +1,18 @@
-use wpilib;
+use wpilib::{self, pwm::PwmSpeedController};
 mod constants;
 mod robot;
 mod xbox_controller;
 use ctre::motor_control::{BaseMotorController, ControlMode, DemandType, TalonSRX};
 
+struct CameraServo {
+    up_down: wpilib::pwm::PwmSpeedController,
+    left_right: wpilib::pwm::PwmSpeedController,
+}
+
 struct Robot {
     left_motor: TalonSRX,
     right_motor: TalonSRX,
+    cam: CameraServo,
 }
 
 impl robot::IterativeRobot for Robot {
@@ -14,6 +20,10 @@ impl robot::IterativeRobot for Robot {
         Robot {
             left_motor: TalonSRX::new(1),
             right_motor: TalonSRX::new(2),
+            cam: CameraServo {
+                up_down: PwmSpeedController::new(0).unwrap(),
+                left_right: PwmSpeedController::new(1).unwrap(),
+            },
         }
     }
     fn teleop_init(&mut self) {
