@@ -8,7 +8,7 @@ edition = "2018"
 [dependencies]
 # wpilib = {path="../first-rust-competition"}
 wpilib = "0.4"
-ctre="0.6"
+ctre={git="https://github.com/first-rust-competition/ctre-rs", rev="744a1e15f3299dd775d91e8bd5c19c1ddbf70079"}
 
 [package.metadata.frc]
 team-number = 1757
